@@ -1,0 +1,42 @@
+/* Light + dark themes for the real site. index.html sets <html data-theme> before first paint
+   (saved choice, else the system setting). Sample/still mode is always light, so the design pixel tests never change.
+   Light values below equal what base.css already paints; dark overrides live only under [data-theme=dark]. */
+:root{
+  --card:#fff;--inv:#0E0F12;--on-inv:#fff;--on-hl:#0E0F12;--stage:#0c0b09;--nav:rgba(255,255,255,.86);--dim:rgba(14,15,18,.16);
+  --t0:#FFF4C7;--t1:#E4F4E9;--t2:#FDECEA;--t3:#E8EEFF;--t4:#F4E8FF;--t5:#EAF6F6;
+}
+:root[data-theme=dark]{
+  color-scheme:dark;
+  --ink:#F4F3EF;--ink2:#D6D4CE;--muted:#9D9B95;--faint:#6F6D68;--line:#2A2A2F;--soft:#1B1B1F;--paper:#0E0E10;--card:#151518;
+  --hl-soft:#2E2914;--save:#3DD68C;--save-soft:#0F2A1C;--warn:#FF8A7A;--warn-soft:#3A1715;
+  --inv:#1C1C21;--on-inv:#fff;--nav:rgba(14,14,16,.78);--dim:rgba(255,255,255,.14);
+  --t0:#3A3318;--t1:#16301F;--t2:#3A1D1A;--t3:#1B2544;--t4:#2D2040;--t5:#15302F;
+  --shadow:0 18px 44px rgba(0,0,0,.5),0 2px 6px rgba(0,0,0,.35);
+}
+
+/* shared components: --ink is light text in dark mode, so anything painted with it as a surface needs dark text */
+:root[data-theme=dark] .btn.ink,:root[data-theme=dark] .pill.on,:root[data-theme=dark] .chip.ink,:root[data-theme=dark] .seg .on,
+:root[data-theme=dark] .tick.k,:root[data-theme=dark] .toast{color:var(--paper)}
+:root[data-theme=dark] .btn.hl,:root[data-theme=dark] .chip.hl,:root[data-theme=dark] .pcs .best,:root[data-theme=dark] .tick.y,:root[data-theme=dark] .mt .best .p{color:var(--on-hl)}
+:root[data-theme=dark] .mark:after{background:var(--on-hl)}
+:root[data-theme=dark] .card{background:var(--card)}
+:root[data-theme=dark] .btn.ghost{background:transparent}
+:root[data-theme=dark] .btn.ink:hover{background:#fff}
+:root[data-theme=dark] .skel{background:linear-gradient(90deg,var(--soft) 0,#26262b 50%,var(--soft) 100%);background-size:320px 100%}
+:root[data-theme=dark] .ab.ue{box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+:root[data-theme=dark] img{filter:brightness(.94)}
+:root[data-theme=dark] .lp-art img,:root[data-theme=dark] .lp-browser img{filter:none}
+
+/* theme switch (landing nav + desktop top bar) */
+.themebtn{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--line);color:var(--ink);flex:none;transition:border-color .2s,transform .3s var(--spring)}
+.themebtn:hover{border-color:var(--ink)}
+.themebtn:active{transform:scale(.92)}
+.themebtn .ic{width:18px;height:18px}
+.themebtn .moon,:root[data-theme=dark] .themebtn .sun{display:none}
+:root[data-theme=dark] .themebtn .moon{display:block}
+html.theming,html.theming *{transition:background-color .35s ease,border-color .35s ease,color .35s ease!important}
+
+/* fields draw their own focus ring around the whole bar, so the input inside doesn't get a second, square-ish outline */
+.lp .lp-addr input:focus-visible,.search input:focus-visible{outline:none}
+.search{transition:box-shadow .2s}
+.search:focus-within{box-shadow:0 0 0 3px rgba(255,212,59,.6)}

@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Fairplate — real delivery prices",
+  "short_name": "Fairplate",
+  "version": "1.0.0",
+  "description": "Saves the menu prices and checkout fees you see on Uber Eats, DoorDash and SkipTheDishes so Fairplate can show them side by side.",
+  "permissions": ["storage"],
+  "icons": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png" },
+  "action": {
+    "default_title": "Fairplate",
+    "default_popup": "popup.html",
+    "default_icon": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png" }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.ubereats.com/*", "https://www.doordash.com/*", "https://www.skipthedishes.com/*"],
+      "js": ["src/parse.js", "src/collect.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["http://localhost:3540/*", "https://goofturtles.github.io/fairplate/*"],
+      "js": ["src/bridge.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
