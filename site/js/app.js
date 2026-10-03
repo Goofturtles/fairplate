@@ -33,6 +33,9 @@
     [/^\/p\/([\w-]+)$/, (p, id) => V.realPlace(p, id)],
     [/^\/address$/, () => V.realAddress()],
     [/^\/extension$/, () => V.extension()],
+    /* the phone tab bar's Price watch and Me: places with captured prices, and your extension + captured data */
+    [/^\/history$/, (p) => { p.set("priced", "1"); return V.realList(p, "Price watch"); }],
+    [/^\/membership$/, () => V.extension("Me")],
   ];
   const R = [
     [/^\/?$/, (p) => (mobile() ? V.home() : V.landing())],

@@ -83,7 +83,7 @@
   }
 
   /* ---------- list (desktop feed + map split / phone results) ---------- */
-  V.realList = (p) => {
+  V.realList = (p, tab) => {
     const list = filterList(p), n = Math.min(list.length, PAGE * (+p.get("page") || 1)), shown = list.slice(0, n);
     const ph = mobile(), map = p.get("view") === "map" && hasMap(), q = p.get("q") || "";
     const to = (u) => "#/feed" + (String(u) ? "?" + u : "");
@@ -107,7 +107,9 @@
     const head = `<b class="fd-count">${list.length.toLocaleString()} place${list.length === 1 ? "" : "s"}${q ? ` for “${esc(q)}”` : ""} near ${esc(S().addr)}</b>`;
     const note = p.get("open") && list.noHours ? `<span class="fd-note">${I("clock", "s")}${list.noHours.toLocaleString()} with unknown hours hidden</span>` : "";
     const credit = `<span class="fd-credit">Photos are examples of the food · © OpenStreetMap contributors</span>`;
-    const empty = `<div class="fd-empty"><b>Nothing matches</b><span>${note ? "Most places don't list their hours on OpenStreetMap." : "Try “pizza”, or clear a filter."}</span><a class="btn ghost sm" href="${reset}">Reset filters</a></div>`;
+    const empty = p.get("priced") && !X().count   // nothing captured yet: say where real prices come from
+      ? `<div class="fd-empty"><b>No real prices yet</b><span>Prices show up here once the Fairplate extension saves them from Uber Eats, DoorDash or Skip.</span><a class="btn ghost sm" href="#/extension">Get the extension</a></div>`
+      : `<div class="fd-empty"><b>Nothing matches</b><span>${note ? "Most places don't list their hours on OpenStreetMap." : "Try “pizza”, or clear a filter."}</span><a class="btn ghost sm" href="${reset}">Reset filters</a></div>`;
     const grid = `<div class="fd-grid" data-stagger>${shown.map(card).join("") || empty}</div>`;
     const more = n < list.length ? `<div class="fd-more"><a class="btn ghost" href="${edit((u) => u.set("page", (+p.get("page") || 1) + 1))}" data-keep>Show ${Math.min(PAGE, list.length - n)} more of ${list.length - n}</a></div>` : "";
     const bar = (inner) => `<div class="fd-sentinel"></div><div class="fd-bar${cat ? " has-cat" : ""}">${inner}</div>`;
@@ -120,7 +122,7 @@
   ${map ? `<div class="fd-pmap"><div class="fd-mapbox" role="region" aria-label="Map of the places listed"></div>
     <div class="fd-strip scroll-x" role="group" aria-label="Places on the map">${shown.map(mini).join("") || `<div class="fd-mini empty">${empty}</div>`}</div></div>`
   : `${grid}${more}<p class="fd-credit fd-foot">Photos are examples of the food · © OpenStreetMap contributors</p>`}
-  <div class="tab-spacer"></div>${tabbar(p.get("saved") ? "Saved" : "Search")}</div>`
+  <div class="tab-spacer"></div>${tabbar(tab || (p.get("saved") ? "Saved" : "Search"))}</div>`
       : `<div class="pg webp fd${map ? " fd-mapview" : ""}">${V.realTop(q)}
   ${bar(`<div class="fd-cats-wrap"><button class="fd-arrow l" aria-label="Scroll cuisines left" hidden>${I("left", "s")}</button><div class="fd-cats scroll-x">${catRow}</div><button class="fd-arrow r" aria-label="Scroll cuisines right" hidden>${I("right", "s")}</button></div>
     <div class="fd-tools"><div class="fd-pills">${pills}${resetA}</div><span class="sp"></span>${sortSeg}${viewSeg}</div>`)}

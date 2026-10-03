@@ -2,7 +2,7 @@
    Styles: css/extpage.css (scoped to .xp). Popup shots: img/ext/popup-<light|dark>.png, the real popup.html rendered with a
    chrome.* stub holding the two captures our parser reads from the REAL test fixtures (no checkout, so no prices shown). */
 (function () {
-  const { I, esc, $, status } = FP.ui;
+  const { I, esc, $, status, tabbar } = FP.ui;
   const V = FP.views, P = () => FP.places, X = () => FP.prices;
   const mobile = () => FP.isMobile();
   const { photo } = FP.rv;
@@ -30,7 +30,7 @@
     `<div class="xs-win xs-cmp">${["ue", "dd", "sk"].map((a, i) => `<div class="${i === 1 ? "best" : ""}"><span class="ab sm ${a}">${X().APPS[a].badge}</span>${bars([[58, 72, 50][i]])}<span class="xs-pill">${i === 1 ? I("check", "s") : ""}</span></div>`).join("")}</div>`,
   ];
 
-  V.extension = () => {
+  V.extension = (tab) => {
     const all = X().all.reverse(), ext = FP.ext || {}, m = mobile(), local = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
     const on = all.filter((o) => o.place && P().byId(o.place)), off = all.filter((o) => !(o.place && P().byId(o.place)));
 
@@ -73,6 +73,6 @@
     const data = `<section class="xp-sec"><h2 class="xp-h2">What it keeps, and what it doesn’t.</h2>
       <div class="xp-facts">${facts.map(([ic, t, s], i) => `<div class="xp-fact${i === 1 ? " inv" : ""}"><span class="xp-ic">${I(ic, "s")}</span><b>${t}</b><p>${s}</p></div>`).join("")}</div></section>`;
 
-    return { title: "Get the extension · Fairplate", html: `<div class="pg ${m ? "app" : "webp"}">${m ? status() : V.realTop()}<div class="xp${m ? " m" : ""}">${hero}${how}${caps}${data}</div></div>` };
+    return { title: "Get the extension · Fairplate", html: `<div class="pg ${m ? "app" : "webp"}">${m ? status() : V.realTop()}<div class="xp${m ? " m" : ""}">${hero}${how}${caps}${data}</div>${m && tab ? `<div class="tab-spacer"></div>${tabbar(tab)}` : ""}</div>` };
   };
 })();
